@@ -29,35 +29,21 @@ public class PlayerController : MonoBehaviour
     public GameObject superaction;
     public GameUIManager uiManager;
     public int hp = 100;
+    public CollisionListScript AttackHumanSensor;
+    public void AttackHuman()
+    {
+        if (AttackHumanSensor.CollisionObjects.Count > 0)
+        {
+            AttackHumanSensor.CollisionObjects[0].transform.SendMessage("Hit", 50);
+        }
+    }
     void Start()
     {
         animatorController = this.GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    public void Hit(int value)
-    {
-        if (hp <= 0)
-        {
-            return;
-        }
-        hp -= value;
-        uiManager.SetHP(hp);
-        if (hp > 0)
-        {
-            uiManager.PlayHitAnimation();
-        }
-        else
-        {
-            uiManager.PlayerDiedAnimation();
-            rigidBody.gameObject.GetComponent<Collider>().enabled = false;
-            rigidBody.useGravity = false;
-            rigidBody.velocity = Vector3.zero;
-            this.enabled = false;
-            rotateXTransform.transform.DOLocalRotate(new Vector3(-60, 0, 0), 0.5f);
-            rotateYTransform.transform.DOLocalMoveY(-1.5f, 0.5f).SetRelative(true);
-        }
-    }
+   
 
     void Update()
     {
@@ -242,5 +228,28 @@ public class PlayerController : MonoBehaviour
     {
         superaction.SetActive(true);
        
+    }
+    public void Hit(int value)
+    {
+        if (hp <= 0)
+        {
+            return;
+        }
+        hp -= value;
+        uiManager.SetHP(hp);
+        if (hp > 0)
+        {
+            uiManager.PlayHitAnimation();
+        }
+        else
+        {
+            uiManager.PlayerDiedAnimation();
+            rigidBody.gameObject.GetComponent<Collider>().enabled = false;
+            rigidBody.useGravity = false;
+            rigidBody.velocity = Vector3.zero;
+            this.enabled = false;
+            rotateXTransform.transform.DOLocalRotate(new Vector3(-60, 0, 0), 0.5f);
+            rotateYTransform.transform.DOLocalMoveY(-1.5f, 0.5f).SetRelative(true);
+        }
     }
 }

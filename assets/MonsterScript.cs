@@ -6,38 +6,47 @@ public class MonsterScript : MonoBehaviour
     private Animator animator;
     private float MinimumHitPeriod = 1f;
     private float HitCounter = 0;
-    public float CurrentHP = 100;
+    public float HP = 100;
     public float MoveSpeed;
     public GameObject FollowTarget;
     private Rigidbody rigidBody;
     public CollisionListScript PlayerSensor;
     public CollisionListScript AttackSensor;
+    public GameObject effect;
+    public GameObject blood;
     // Use this for initialization
     public void AttackPlayer()
     {
         if (AttackSensor.CollisionObjects.Count > 0)
         {
             AttackSensor.CollisionObjects[0].transform.GetChild(0).GetChild(0).SendMessage("Hit", 10);
+            blood.SetActive(true);
+
         }
+       
+            
     }
     void Start()
     {
         animator = this.GetComponent<Animator>();
         rigidBody = this.GetComponent<Rigidbody>();
     }
+   
+    
     void Update()
     {
+        blood.SetActive(false);
         if (PlayerSensor.CollisionObjects.Count > 0)
         {
             FollowTarget = PlayerSensor.CollisionObjects[0].gameObject;
         }
-        if (CurrentHP > 0 && HitCounter > 0)
+        if (HP > 0 && HitCounter > 0)
         {
             HitCounter -= Time.deltaTime;
         }
         else
         {
-            if (CurrentHP > 0)
+            if (HP > 0)
             {
                 if (FollowTarget != null)
                 {
@@ -68,10 +77,11 @@ public class MonsterScript : MonoBehaviour
         if (HitCounter <= 0)
         {
             HitCounter = MinimumHitPeriod;
-            CurrentHP -= value;
-            animator.SetFloat("HP", CurrentHP);
+            HP -= value;
+            animator.SetFloat("HP", HP);
             animator.SetTrigger("Hit");
-            if (CurrentHP <= 0) { BuryTheBody(); }
+            effect.SetActive(true);
+            if (HP <= 0) { BuryTheBody(); }
         }
     }
     void BuryTheBody()
