@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+
 public class GameUIManager : MonoBehaviour
 {
     public Image BlackCover;
@@ -25,7 +27,15 @@ public class GameUIManager : MonoBehaviour
     public void PlayerDiedAnimation()
     {
         BloodBlur.color = Color.white;
-        DOTween.To(() => BlackCover.color, (x) => BlackCover.color = x, new Color(0, 0, 0, 1), 1f).SetDelay(3);
+		DOTween.To (() => BlackCover.color, (x) => BlackCover.color = x, new Color (0, 0, 0, 1), 1f).SetDelay (3);
+//		OnComplete(() => {
+//			DoTween.To(() => BloodBlur.color,
+//				(x) => BloodBlur.color = x,
+//				new Color(1, 1, 1, 0), 0.5f).SetDelay(3).OnComplete(() =>{
+//					SceneManager.LoadScene("Demo1");
+//				});
+//			
+//		});
     }
     public void SetHP(int hp)
     {
