@@ -30,12 +30,16 @@ public class PlayerController : MonoBehaviour
     public GameUIManager uiManager;
     public int hp = 100;
     public CollisionListScript AttackHumanSensor;
+	public Transform Inventory;
+	public float ThrowDistance = 2f;
+
     public void AttackHuman()
     {
         if (AttackHumanSensor.CollisionObjects.Count > 0)
         {
             AttackHumanSensor.CollisionObjects[0].transform.SendMessage("Hit", 50);
         }
+
     }
     void Start()
     {
@@ -100,10 +104,13 @@ public class PlayerController : MonoBehaviour
             bombaction.SetActive(false);
             super.SetActive(false);
             littleknifeaction.SetActive(false);
+
+
             if (Input.GetMouseButtonDown(0))
             {
                 animatorController.SetBool("Attack01", true);
                 this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -127,6 +134,11 @@ public class PlayerController : MonoBehaviour
             {
                 animatorController.SetBool("Attack02", true);
                 this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+				var thrownItem = Instantiate(Inventory, transform.position, Quaternion.identity) as Transform;
+				thrownItem.name = Inventory.name;
+				thrownItem.Translate(0, 0, ThrowDistance);
+
+				//bomb.SetActive(false);
             }
 
             if (Input.GetMouseButtonUp(0))
